@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import {NavController, ToastController} from '@ionic/angular';
 import * as moment from 'moment';
 
 @Component({
@@ -9,14 +9,24 @@ import * as moment from 'moment';
 })
 export class HomePage implements OnInit {
 
-
-  constructor() {
-
+  public progress = 0;
+  constructor(
+    public navCtrl: NavController
+  ) {
+    setInterval(() => {
+      this.progress += 0.01;
+      if (this.progress > 1) {
+        setTimeout(() => {
+          this.progress = 0;
+        }, 5000);
+      }
+    }, 50);
   }
 
   ngOnInit() {
   }
-
-
+logout(){
+  this.navCtrl.navigateRoot('');
+}
 
 }
