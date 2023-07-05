@@ -44,6 +44,10 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
+  valida(){
+
+
+  }
 
   async login() {
     var f = this.formularioLogin.value;
@@ -52,7 +56,7 @@ export class LoginPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Incomplete data',
         message: 'You must fill in all the data',
-        buttons: ['Acept']
+        buttons: ['accept']
       });
       await alert.present();
       return;
@@ -75,32 +79,28 @@ export class LoginPage implements OnInit {
         password: this.user.password
       });
       const info = response.data;
-      console.log(info)
       if (info != null) {
-        localStorage.setItem('user', JSON.stringify(this.user))
+        localStorage.setItem('user', JSON.stringify(info))
         this.navCtrl.navigateRoot('home');
+      }else{
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'incorrect credentials',
+          buttons: ['accept']
+        });
+        await alert.present();
+        return;
       }
     } catch (error) {
-      console.error(error);
-      alert("No hay comunicación con el servidor");
+      console.error(error);const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Server not available ',
+        buttons: ['accept']
+      });
+      await alert.present();
+      return;
     }
   }
 
 
-
-  conectest(){
-    console.log("ingreso ")
-    const test = {user: this.user.user, password: this.user.password}
-    const u = '4dm1nst4d0r';
-    const p = '$2a$10$gJzFzIjsHa3DUbIdb3sUjePRXTAsLbjL3oLYXuA8nNy1AHXXDPU0m';
-    var httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(u + ':' + p)
-      })
-    }
-    this.http.post<any>("http://localhost:5001/auth/authentications",this.user,httpOptions).pipe(
-      catchError(err => "error")
-    )
-  }
 }
